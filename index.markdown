@@ -7,8 +7,9 @@ layout: home
 
 I am a PhD candidate in Genetics Department at Stanford University. I am fortunate to be mentored by [Alistair Boettiger](https://boettigerlab.stanford.edu). Broadly, I am interested in chromatin structures in various contexts.
 Specifically, I am interested in...  
-1. The changes in chromatin structures as a function of cell cycle and how loop extrusion proteins affect chromatin folding process. 
-2. Using molecular dynamics simulation to study the effects of cohesins and friends on interphase chromatin structures. 
+
+    1. The changes in chromatin structures as a function of cell cycle and how loop extrusion proteins affect chromatin folding process. 
+    2. The roles of cohesins and friends on interphase chromatin structures using molecular dynamics simulations. 
 
 Since Summer 2024, as a guest researcher at Flatiron Institute, I have been working closely with [Pilar Cossio](https://www.simonsfoundation.org/people/pilar-cossio/) to develop a computational tool to describe high-dimensional heterogeneity of chromatin structures inspired by statistical mechanics, Bayesian inference, and information theory. 
 
