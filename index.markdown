@@ -11,7 +11,7 @@ Since Summer 2024, as a guest researcher at Flatiron Institute, I have been work
 
 Before Stanford, I received a bachelor's degree in [Computer Science and Molecular Biology](https://catalog.mit.edu/degree-charts/computer-science-molecular-biology-course-6-7/) from MIT. As an undergraduate researcher, I studied [the non-Markovian property of cell state transitions in mouse embryonic stem cells](https://www.cell.com/iscience/fulltext/S2589-0042(21)00847-6) with [Salil Garg](https://www.garglab.org). 
 
-In my free time, you can find me catching up with *The New Yorker*, listening to [Brahms](https://www.youtube.com/watch?v=p73MD6QHpIQ), and playing pickleball.
+Outside of science, you can find me catching up with [*The New Yorker*](https://www.newyorker.com/magazine/2009/05/18/delphiniums-in-a-window-box), listening to [Brahms](https://www.youtube.com/watch?v=p73MD6QHpIQ), and looking at [Caspar David Friedrich's paintings](https://en.wikipedia.org/wiki/Morning_on_the_Riesengebirge#/media/File:Caspar_David_Friedrich,_Morgen_im_Riesengebirge.jpg).
 
 You can contact me at teeu (at) stanford (dot) edu.
 
