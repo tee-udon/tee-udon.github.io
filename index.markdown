@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: home
 ---
 
 I am a PhD candidate in Genetics Department at Stanford University. I am fortunate to be mentored by [Alistair Boettiger](https://boettigerlab.stanford.edu). Broadly, I am interested in chromatin structures in various contexts.
