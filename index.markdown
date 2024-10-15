@@ -2,8 +2,8 @@
 layout: home
 ---
 <div style="display: flex; align-items: center;">
-  <img src="/assets/images/portrait.png" alt="Professional portrait" style="float: left; margin-right: 15px; border-radius: 50%; width: 150px;">
-  <p>
+  <img src="/assets/images/portrait.jpeg" alt="Professional portrait" style="float: left; margin-right: 15px; border-radius: 50%; width: 150px;">
+  <p markdown="1">
     I am a PhD candidate in Genetics Department at Stanford University. I am fortunate to be mentored by [Alistair Boettiger](https://boettigerlab.stanford.edu). Broadly, I am interested in chromatin structures in various contexts.
     Specifically, I am interested in...  
     1. The changes in chromatin structures as a function of cell cycle and how loop extrusion proteins affect chromatin folding process. 
