@@ -1,8 +1,8 @@
 ---
 layout: home
 ---
-<p style="float: left; margin: 0 10px 10px 0;">
-  <img src="/assets/images/portrait.jpeg" alt="Professional portrait" style="float: width: 150px; height: auto;">
+<p>
+  <img src="/assets/images/portrait.jpeg" alt="Professional portrait" style="float: left; width: 50px; height: auto; margin: 0 10px 10px 0;">
 </p>
 
 I am a PhD candidate in Genetics Department at Stanford University. I am fortunate to be mentored by [Alistair Boettiger](https://boettigerlab.stanford.edu). Broadly, I am interested in chromatin structures in various contexts.
