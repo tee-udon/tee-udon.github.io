@@ -5,7 +5,7 @@ layout: home
   <img src="/assets/images/portrait.jpeg" alt="Professional portrait" style="float: left; width: 250px; height: auto; margin: 0 20px 20px 0;">
 </p>
 
-I am a PhD candidate in Genetics Department at Stanford University. I am fortunate to be mentored by [Alistair Boettiger](https://boettigerlab.stanford.edu). Broadly, I am interested in chromatin structures in various contexts. Specifically, I am interested in how chromatin structures change as a function of cell cycle, how loop extrusion proteins affect mitotic condensation process, and how the nuclear environment affects the architecture of interphase chromatin.
+I am a PhD candidate in Genetics Department at Stanford University. I am fortunate to be mentored by [Alistair Boettiger](https://boettigerlab.stanford.edu). Broadly, I study chromatin structures in various contexts. Specifically, I am interested in how chromatin structures change as a function of cell cycle, how loop extrusion proteins affect mitotic condensation process, and how the nuclear environment affects the architecture of interphase chromatin.
 
 Since Summer 2024, as a guest researcher at Flatiron Institute, I have been working closely with [Pilar Cossio](https://www.simonsfoundation.org/people/pilar-cossio/) to develop a computational tool to describe high-dimensional heterogeneity of chromatin structures inspired by statistical mechanics, Bayesian inference, and information theory. 
 
