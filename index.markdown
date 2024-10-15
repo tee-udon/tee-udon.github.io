@@ -12,7 +12,7 @@ Specifically, I am interested in...
 
 Since Summer 2024, as a guest researcher at Flatiron Institute, I have been working closely with [Pilar Cossio](https://www.simonsfoundation.org/people/pilar-cossio/) to develop a computational tool to describe high-dimensional heterogeneity of chromatin structures inspired by statistical mechanics, Bayesian inference, and information theory. 
 
-Before Stanford, I received a Bachelors degree in Computer Science and Molecular Biology from MIT. As an undergraduate researcher, I studied [the non-Markovian property of cell state transitions in mouse embryonic stem cells](https://www.cell.com/iscience/fulltext/S2589-0042(21)00847-6) with [Salil Garg](https://www.garglab.org). 
+Before Stanford, I received a bachelor's degree in Computer Science and Molecular Biology from MIT. As an undergraduate researcher, I studied [the non-Markovian property of cell state transitions in mouse embryonic stem cells](https://www.cell.com/iscience/fulltext/S2589-0042(21)00847-6) with [Salil Garg](https://www.garglab.org). 
 
 In my free time, you can find me catching up with *The New Yorker*, listening to Brahms, and playing pickleball.
 
