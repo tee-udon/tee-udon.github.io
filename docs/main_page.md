@@ -1,5 +1,4 @@
 layout: page 
 title: "Tee Udomlumleart"
-permalink: /about
-
+permalink: /
 Welcome!
