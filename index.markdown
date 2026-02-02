@@ -1,6 +1,8 @@
 ---
 layout: home
+title: About Me
 ---
+
 <p>
   <img src="/assets/images/portrait.jpeg" alt="Professional portrait" style="float: left; width: 250px; height: auto; margin: 0 20px 20px 0;">
 </p>
