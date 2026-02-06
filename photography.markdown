@@ -57,7 +57,8 @@ I view life as an integral—a sum of infinite, small moments. We often worry so
 
 .image-wrapper {
   position: relative; /* Needed to position the shield */
-  display: inline-block;
+  display: block;      /* Changed from inline-block to block */
+  width: 100%;         /* Forces the wrapper to fill the column width */
 }
 
 .shield {
