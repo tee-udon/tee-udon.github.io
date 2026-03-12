@@ -15,12 +15,43 @@ From the slopes of Mission Dolores to the shores of Ocean Beach, I tried to capt
 
 I view life as an integral—a sum of infinite, small moments. We often worry so much about the "area under the curve" that we miss the beauty of the small slices itself. Photography forces me to slow down, listen to my surroundings, and capture the fleeting, mundane, and beautiful evidence of us connecting with one another.
 
+{% assign featured_photos = site.data.photography | where: "featured", true %}
 
-<div class="photo-grid">
+{% if featured_photos.size > 0 %}
+  <h2 style="margin-top: 40px;">Selected Moments</h2>
+  <div class="photo-grid" id="featured-grid-container" style="margin-bottom: 50px;">
+    {% for photo in featured_photos %}
+    <div class="photo-item">
+      <div class="image-wrapper">
+        <img src="/assets/photography_lowres/{{ photo.filename }}" alt="{{ photo.location }}">
+        <div class="shield"></div>
+      </div>
+      <div class="caption">
+        <p>
+          {{ photo.location }}<br>
+          {{ photo.date }}
+        </p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <hr> {% endif %}
+
+<h2 style="margin-top: 40px;">All Moments</h2>
+
+<div class="sort-controls" style="text-align: right; margin-bottom: 20px;">
+  <label for="sort-select">Sort by: </label>
+  <select id="sort-select">
+    <option value="newest" selected>Newest First</option>
+    <option value="oldest">Oldest First</option>
+  </select>
+</div>
+
+<div class="photo-grid" id="photo-grid-container">
   {% for photo in site.data.photography %}
-  <div class="photo-item">
+  <div class="photo-item" data-timestamp="{{ photo.date | date: '%s' }}">
     <div class="image-wrapper">
-      <img src="/assets/photography_lowres/{{ photo.filename }}" alt="{{ photo.title }}">
+      <img src="/assets/photography_lowres/{{ photo.filename }}" alt="{{ photo.location }}">
       <div class="shield"></div>
     </div>
     
@@ -94,5 +125,50 @@ img {
     if (e.target.tagName === 'IMG') {
       e.preventDefault();
     }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const select = document.getElementById('sort-select');
+    const grid = document.getElementById('photo-grid-container');
+    
+    // Check if the grid exists to prevent errors
+    if (!grid) return; 
+
+    // Get all photo items as an array
+    const items = Array.from(grid.querySelectorAll('.photo-item'));
+    
+    // Store original elements in their exact starting order
+    const originalOrder = [...items];
+
+    select.addEventListener('change', function() {
+      const order = this.value;
+      
+      if (order === 'original') {
+        // Clear grid and restore original order
+        grid.innerHTML = '';
+        originalOrder.forEach(item => grid.appendChild(item));
+        return;
+      }
+
+      // Sort the items mathematically based on the timestamp
+      items.sort((a, b) => {
+        const timeA = parseInt(a.getAttribute('data-timestamp'), 10);
+        const timeB = parseInt(b.getAttribute('data-timestamp'), 10);
+
+        if (order === 'newest') {
+          return timeB - timeA; // Highest number (newest) first
+        } else if (order === 'oldest') {
+          return timeA - timeB; // Lowest number (oldest) first
+        }
+      });
+
+      // Clear the grid and append the sorted items
+      grid.innerHTML = '';
+      items.forEach(item => grid.appendChild(item));
+    });
+
+    // NEW LINE: Trigger the sorting logic immediately when the page loads
+    select.dispatchEvent(new Event('change'));
   });
 </script>

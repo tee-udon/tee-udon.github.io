@@ -1,10 +1,12 @@
 - filename: IMG_2908.jpeg
   location: Crissy Field Beach, the Presidio
   date: January 2026
+  featured: true 
 
 - filename: IMG_3594.jpeg
   location: Santa Cruz, California
   date: January 2026
+  featured: true
 
 - filename: IMG_3634.jpeg
   location: Santa Cruz, California
@@ -25,6 +27,7 @@
 - filename: IMG_3290.jpeg
   location: Magnolia Brewing, Haight-Ashbury
   date: January 2026
+  featured: true 
 
 - filename: IMG_3204.jpeg
   location: de Young Museum, Golden Gate Park
@@ -53,6 +56,7 @@
 - filename: IMG_2888.jpeg
   location: Alamo Square, Western Addition
   date: January 2026
+  featured: true
 
 - filename: IMG_4094-2.jpeg
   location: Mission Blue, Visitacion Valley
@@ -113,3 +117,88 @@
 - filename: IMG_4264.jpeg
   location: Mlk Dr and Lincoln Wy, Golden Gate Park
   date: January 2026
+
+- filename: IMG_4349.jpg
+  location: Caltrain, California
+  date: February 2026
+  featured: true 
+
+- filename: IMG_4438.jpg
+  location: Sue Bierman Park, Financial District
+  date: February 2026
+
+- filename: IMG_4449.jpg
+  location: Portsmouth Square Park, Chinatown
+  date: February 2026
+
+- filename: IMG_4453.jpg
+  location: Grant Ave and Clay St, Chinatown
+  date: February 2026
+
+- filename: IMG_4470.jpg
+  location: Grant Ave and Sacramento St, Chinatown
+  date: February 2026
+
+- filename: IMG_4525.jpeg
+  location: Lincoln Blvd, the Presidio
+  date: December 2025
+
+- filename: IMG_4538.jpg
+  location: Powell St and Jackson St, Chinatown
+  date: February 2026
+
+- filename: IMG_4555.jpg
+  location: Powell St, Chinatown
+  date: February 2026
+
+- filename: IMG_4731-2.jpg
+  location: Marina Blvd, Marina District
+  date: February 2026
+
+- filename: IMG_4732-2.jpg
+  location: Marina Blvd, Marina District
+  date: February 2026
+
+- filename: IMG_5402-2.jpg
+  location: Buchanan St, Japantown
+  date: March 2026
+
+- filename: IMG_5410.jpg
+  location: Bandit, Mission District
+  date: March 2026
+  featured: true 
+
+- filename: IMG_5426.jpg
+  location: Dolores Park Cafe, Mission District
+  date: March 2026
+
+- filename: IMG_5432.jpg
+  location: Bi-Rite Creamery, Japantown
+  date: March 2026
+
+- filename: IMG_5511.jpg
+  location: Baker Beach, the Presidio
+  date: March 2026
+
+- filename: IMG_5537.jpg
+  location: Baker Beach, the Presidio
+  date: March 2026
+
+- filename: IMG_5600.jpg
+  location: Baker Beach, the Presidio
+  date: March 2026
+  featured: true 
+
+- filename: IMG_5807.jpg
+  location: Golden Boy Pizza, North Beach
+  date: March 2026
+  featured: true 
+
+- filename: IMG_5816.jpg
+  location: Golden Boy Pizza, North Beach
+  date: March 2026
+
+- filename: IMG_5861.jpg
+  location: Red Window, North Beach
+  date: March 2026
+  
