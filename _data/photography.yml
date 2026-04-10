@@ -192,7 +192,6 @@
 - filename: IMG_5807.jpg
   location: Golden Boy Pizza, North Beach
   date: March 2026
-  featured: true 
 
 - filename: IMG_5816.jpg
   location: Golden Boy Pizza, North Beach
@@ -233,5 +232,48 @@
 - filename: IMG_6745.jpg
   location: Columbus Ave, North Beach
   date: March 2026
-   
+
+- filename: IMG_8109 Large.jpeg
+  location: Tidal Basin, Washington, DC
+  date: April 2026
+  featured: true
+
+- filename: IMG_8112 Large.jpeg
+  location: Tidal Basin, Washington, DC
+  date: April 2026
+  featured: true
+
+- filename: IMG_8131 Large.jpeg
+  location: Tidal Basin, Washington, DC
+  date: April 2026
+
+- filename: IMG_8134 Large.jpeg
+  location: Tidal Basin, Washington, DC
+  date: April 2026
+
+- filename: IMG_8147 Large.jpeg
+  location: Tidal Basin, Washington, DC
+  date: April 2026
+
+- filename: IMG_8162 Large.jpeg
+  location: Smithsonian Station, Washington, DC
+  date: April 2026
+
+- filename: IMG_8249 Large.jpeg
+  location: L'Enfant Station, Washington, DC
+  date: April 2026
+
+- filename: IMG_7084.jpeg
+  location: Duke Ellington Memorial Bridge, Adams Morgan, Washington, DC
+  date: April 2026
+
+- filename: IMG_7090.jpeg
+  location: Woodley Park-Zoo/Adams Morgan Station, Adams Morgan, Washington, DC
+  date: April 2026
+
+- filename: IMG_7286.jpeg
+  location: Dumbarton Oaks, Georgetown, Washington, DC
+  date: April 2026
+  featured: true
+
   
