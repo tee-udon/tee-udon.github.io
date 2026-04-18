@@ -5,3 +5,4 @@ Gemfile.lock
 .jekyll-metadata
 vendor
 cheat-sheet.html
+.claude/
