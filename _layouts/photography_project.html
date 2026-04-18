@@ -46,10 +46,8 @@ layout: page
     </div>
 
     <div class="caption">
-      <p>
-        {{ photo.location }}<br>
-        {{ photo.date }}
-      </p>
+      <p class="loc" title="{{ photo.location }}">{{ photo.location }}</p>
+      <p class="date">{{ photo.date }}</p>
     </div>
   </div>
   {% endfor %}
@@ -107,6 +105,24 @@ layout: page
   .post-content p {
   text-align: justify;
   hyphens: auto;  
+  }
+
+  .caption p {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  }
+
+  .caption .loc {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+  }
+  
+  .caption .date {
+    margin: 0;
+    color: #666;
   }
 </style>
 
