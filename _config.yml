@@ -33,6 +33,18 @@ theme: minima
 # plugins:
 #   - jekyll-feed
 
+collections:
+  photography:
+    output: true
+    permalink: /photography/:path/
+
+defaults:
+  - scope:
+      path: ""
+      type: photography
+    values:
+      layout: photography_project
+
 # Exclude from processing.
 # The following items will not be processed, by default.
 # Any item listed under the `exclude:` key here will be automatically added to

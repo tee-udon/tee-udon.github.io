@@ -1,0 +1,150 @@
+---
+layout: page
+---
+{{ content }}
+
+{% assign photos = site.data.photography[page.data_key] %}
+{% assign featured_photos = photos | where: "featured", true %}
+
+{% if featured_photos.size > 0 %}
+  <h2 style="margin-top: 40px;">Selected Moments</h2>
+  <div class="photo-grid" id="featured-grid-container" style="margin-bottom: 50px;">
+    {% for photo in featured_photos %}
+    <div class="photo-item">
+      <div class="image-wrapper">
+        <img src="/assets/photography_lowres/{{ photo.filename }}" alt="{{ photo.location }}">
+        <div class="shield"></div>
+      </div>
+      <div class="caption">
+        <p>
+          {{ photo.location }}<br>
+          {{ photo.date }}
+        </p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <hr>
+{% endif %}
+
+<h2 style="margin-top: 40px;">All Moments</h2>
+
+<div class="sort-controls" style="text-align: right; margin-bottom: 20px;">
+  <label for="sort-select">Sort by: </label>
+  <select id="sort-select">
+    <option value="newest" selected>Newest First</option>
+    <option value="oldest">Oldest First</option>
+  </select>
+</div>
+
+<div class="photo-grid" id="photo-grid-container">
+  {% for photo in photos %}
+  <div class="photo-item" data-timestamp="{{ photo.date | date: '%s' }}">
+    <div class="image-wrapper">
+      <img src="/assets/photography_lowres/{{ photo.filename }}" alt="{{ photo.location }}">
+      <div class="shield"></div>
+    </div>
+
+    <div class="caption">
+      <p>
+        {{ photo.location }}<br>
+        {{ photo.date }}
+      </p>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<style>
+  .photo-grid {
+    column-count: 3;
+    column-gap: 15px;
+  }
+
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+  }
+
+  .photo-item img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .image-wrapper {
+    position: relative;
+    display: block;
+    width: 100%;
+  }
+
+  .shield {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0);
+    z-index: 10;
+  }
+
+  img {
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+  }
+</style>
+
+<script>
+  document.addEventListener('contextmenu', function(e) {
+    if (e.target.tagName === 'IMG') {
+      e.preventDefault();
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const select = document.getElementById('sort-select');
+    const grid = document.getElementById('photo-grid-container');
+
+    if (!grid) return;
+
+    const items = Array.from(grid.querySelectorAll('.photo-item'));
+    const originalOrder = [...items];
+
+    select.addEventListener('change', function() {
+      const order = this.value;
+
+      if (order === 'original') {
+        grid.innerHTML = '';
+        originalOrder.forEach(item => grid.appendChild(item));
+        return;
+      }
+
+      items.sort((a, b) => {
+        const timeA = parseInt(a.getAttribute('data-timestamp'), 10);
+        const timeB = parseInt(b.getAttribute('data-timestamp'), 10);
+
+        if (order === 'newest') {
+          return timeB - timeA;
+        } else if (order === 'oldest') {
+          return timeA - timeB;
+        }
+      });
+
+      grid.innerHTML = '';
+      items.forEach(item => grid.appendChild(item));
+    });
+
+    select.dispatchEvent(new Event('change'));
+  });
+</script>
