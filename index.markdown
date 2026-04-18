@@ -13,7 +13,7 @@ Since Summer 2024, as a guest researcher at Flatiron Institute, I have been work
 
 Before Stanford, I received a bachelor's degree in [Computer Science and Molecular Biology](https://catalog.mit.edu/degree-charts/computer-science-molecular-biology-course-6-7/) from MIT. As an undergraduate researcher, I studied [the non-Markovian property of cell state transitions in mouse embryonic stem cells](https://www.cell.com/iscience/fulltext/S2589-0042(21)00847-6) with [Salil Garg](https://www.garglab.org). 
 
-Outside of science, you can find me [wandering San Francisco with my camera](/photography/), catching up with [*The New Yorker*](https://www.newyorker.com/magazine/2009/05/18/delphiniums-in-a-window-box), and listening to [Brahms](https://www.youtube.com/watch?v=p73MD6QHpIQ).
+Outside of science, you can find me [wandering San Francisco with my camera](/photography/capturing-human-connection/), catching up with [*The New Yorker*](https://www.newyorker.com/magazine/2009/05/18/delphiniums-in-a-window-box), and listening to [Brahms](https://www.youtube.com/watch?v=p73MD6QHpIQ).
 
 You can contact me at teeu (at) stanford (dot) edu.
 
