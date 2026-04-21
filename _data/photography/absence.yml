@@ -1,0 +1,4 @@
+# - filename: IMG_XXXX.jpeg
+#   location:
+#   date: 2026-04-01   # YYYY-MM-DD — day defaults to 01 if unknown
+#   featured: true
