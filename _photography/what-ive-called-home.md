@@ -1,7 +1,7 @@
 ---
 title: What I've Called Home
 cover: IMG_7205 Large.jpeg
-blurb: A photo portfolio of the places and people I've called home across the last several years. What stays, what shifts, and what a photograph can hold when a home begins to change.
+blurb: Places and people I've called home across the last several years. What stays, what shifts, and what a photograph can hold when a home begins to change.
 data_key: what-ive-called-home
 order: 2
 ---

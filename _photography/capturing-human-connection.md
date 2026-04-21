@@ -1,7 +1,7 @@
 ---
-title: Capturing Human Connection
+title: In Passing
 cover: IMG_2908.jpeg
-blurb: Finding the present moment on the streets of San Francisco.
+blurb: Looking for landscapes in San Francisco, finding people instead.
 data_key: capturing-human-connection
 order: 1
 ---
