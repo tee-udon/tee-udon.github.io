@@ -1,7 +1,7 @@
 ---
 layout: default
 ---
-<article class="post project-page">
+<article class="post">
   <p class="back-link"><a href="{{ '/photography/' | relative_url }}">← Back to Photography</a></p>
   <header class="post-header">
     <h1 class="post-title">{{ page.title | escape }}</h1>
@@ -21,7 +21,7 @@ layout: default
 {% if metadata %}
   {% assign featured_photos = metadata | where: "featured", true %}
   {% if featured_photos.size > 0 %}
-    <h2 class="project-section-heading" style="margin-top: 40px;">Selected Moments</h2>
+    <h2 style="margin-top: 40px;">Selected Moments</h2>
     <div class="photo-grid" id="featured-grid-container" style="margin-bottom: 50px;">
       {% for photo in featured_photos %}
       <div class="photo-item">
@@ -38,11 +38,11 @@ layout: default
       </div>
       {% endfor %}
     </div>
-    <hr class="project-section-divider">
+    <hr>
   {% endif %}
 {% endif %}
 
-<h2 class="project-section-heading" style="margin-top: 40px;">All Moments</h2>
+<h2 style="margin-top: 40px;">All Moments</h2>
 
 <div class="sort-controls" style="text-align: right; margin-bottom: 20px;">
   <label for="sort-select">Sort by: </label>
@@ -52,38 +52,32 @@ layout: default
   </select>
 </div>
 
-<div class="photo-grid-wrapper">
-  <aside class="timeline-histogram" id="timeline-histogram" aria-label="Photo timeline" hidden></aside>
-
-  <div class="photo-grid" id="photo-grid-container">
-    {% if metadata %}
-      {% for photo in metadata %}
-      <div class="photo-item"
-           data-timestamp="{% if photo.date %}{{ photo.date | date: '%s' }}{% else %}0{% endif %}"
-           {% if photo.date %}data-month="{{ photo.date | date: '%Y-%m' }}"{% endif %}>
-        <div class="image-wrapper">
-          <img src="{{ project_path }}{{ photo.filename }}" alt="{{ photo.location }}">
-          <div class="shield"></div>
-        </div>
-
-        <div class="caption">
-          <p class="loc" title="{{ photo.location }}">{{ photo.location }}</p>
-          <p class="date">{{ photo.date | date: "%B %Y" }}</p>
-        </div>
+<div class="photo-grid" id="photo-grid-container">
+  {% if metadata %}
+    {% for photo in metadata %}
+    <div class="photo-item" data-timestamp="{% if photo.date %}{{ photo.date | date: '%s' }}{% else %}0{% endif %}">
+      <div class="image-wrapper">
+        <img src="{{ project_path }}{{ photo.filename }}" alt="{{ photo.location }}">
+        <div class="shield"></div>
       </div>
-      {% endfor %}
-    {% endif %}
-    {% for file in project_files %}
-      {% unless meta_filenames contains file.name %}
-      <div class="photo-item" data-timestamp="0">
-        <div class="image-wrapper">
-          <img src="{{ file.path }}" alt="">
-          <div class="shield"></div>
-        </div>
+
+      <div class="caption">
+        <p class="loc" title="{{ photo.location }}">{{ photo.location }}</p>
+        <p class="date">{{ photo.date | date: "%B %Y" }}</p>
       </div>
-      {% endunless %}
+    </div>
     {% endfor %}
-  </div>
+  {% endif %}
+  {% for file in project_files %}
+    {% unless meta_filenames contains file.name %}
+    <div class="photo-item" data-timestamp="0">
+      <div class="image-wrapper">
+        <img src="{{ file.path }}" alt="">
+        <div class="shield"></div>
+      </div>
+    </div>
+    {% endunless %}
+  {% endfor %}
 </div>
 
 {% assign projects = site.photography | sort: "order" %}
@@ -123,35 +117,20 @@ layout: default
 </article>
 
 <style>
-  /* Prevent horizontal scroll from the photo-grid break-out below */
-  html, body { overflow-x: hidden; }
+  .photo-grid {
+    column-count: 3;
+    column-gap: 15px;
+  }
 
   .photo-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 18px;
-  }
-
-  /* Photo grids and their section titles break out of minima's narrow
-     wrapper so they can align with the wider photo column. Text intro
-     and project nav stay at the default ~740px width for readability. */
-  .project-page .photo-grid,
-  .project-page .project-section-heading,
-  .project-page .project-section-divider,
-  .project-page .sort-controls {
-    position: relative;
-    width: 100vw;
-    max-width: 1200px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 0 24px;
-    box-sizing: border-box;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
   }
 
   .photo-item img {
     width: 100%;
-    height: auto;
-    aspect-ratio: 3 / 2;
+    height: 250px;
     object-fit: cover;
     display: block;
   }
@@ -249,106 +228,6 @@ layout: default
     display: block;
     font-size: 1.1em;
   }
-
-  .photo-grid-wrapper {
-    position: relative;
-  }
-
-  .timeline-histogram {
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 96px;
-    z-index: 20;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: flex-start;
-    padding: 24px 12px;
-    background: rgba(255, 255, 255, 0.65);
-    backdrop-filter: blur(6px);
-    border-right: 1px solid rgba(0, 0, 0, 0.04);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-  }
-
-  .timeline-histogram[hidden] {
-    display: none;
-  }
-
-  .timeline-year-group {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    align-items: flex-start;
-    width: 100%;
-  }
-
-  .timeline-year-label {
-    font-size: 0.75em;
-    color: #777;
-    line-height: 1;
-    user-select: none;
-    pointer-events: none;
-    font-weight: 500;
-    letter-spacing: 0.02em;
-  }
-
-  .timeline-bar {
-    display: block;
-    height: 6px;
-    min-width: 14px;
-    background: #cfcfcf;
-    border-radius: 1px;
-    cursor: pointer;
-    text-decoration: none;
-    position: relative;
-    transition: background 0.15s ease, transform 0.15s ease;
-    transform-origin: left center;
-  }
-
-  .timeline-bar:hover,
-  .timeline-bar:focus-visible {
-    background: #222;
-    transform: scaleX(1.12);
-    outline: none;
-  }
-
-  .timeline-bar.is-current {
-    background: #444;
-    transform: scaleX(1.06);
-  }
-
-  .timeline-bar::after {
-    content: attr(data-label);
-    position: absolute;
-    left: calc(100% + 10px);
-    top: 50%;
-    transform: translateY(-50%);
-    background: #222;
-    color: #fff;
-    font-size: 0.75em;
-    padding: 3px 8px;
-    border-radius: 3px;
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.1s ease;
-    z-index: 1;
-  }
-
-  .timeline-bar:hover::after,
-  .timeline-bar:focus-visible::after {
-    opacity: 1;
-  }
-
-  /* Histogram only visible when there's room to clear the photo grid
-     without overlapping it. */
-  @media (max-width: 1450px) {
-    .timeline-histogram {
-      display: none;
-    }
-  }
 </style>
 
 <script>
@@ -361,134 +240,11 @@ layout: default
   document.addEventListener('DOMContentLoaded', function() {
     const select = document.getElementById('sort-select');
     const grid = document.getElementById('photo-grid-container');
-    const histogram = document.getElementById('timeline-histogram');
 
     if (!grid) return;
 
     const items = Array.from(grid.querySelectorAll('.photo-item'));
     const originalOrder = [...items];
-
-    const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June',
-                         'July', 'August', 'September', 'October', 'November', 'December'];
-
-    function formatMonth(key) {
-      const [y, m] = key.split('-');
-      return MONTH_NAMES[parseInt(m, 10) - 1] + ' ' + y;
-    }
-
-    let scrollSpyObserver = null;
-    const visibleMonthCounts = {};
-
-    function setActiveMonth(month) {
-      if (!histogram) return;
-      histogram.querySelectorAll('.timeline-bar').forEach(bar => {
-        bar.classList.toggle('is-current', bar.dataset.month === month);
-      });
-    }
-
-    function updateActiveFromVisible() {
-      let bestMonth = null;
-      let bestCount = 0;
-      Object.keys(visibleMonthCounts).forEach(m => {
-        const c = visibleMonthCounts[m];
-        if (c > bestCount) { bestMonth = m; bestCount = c; }
-      });
-      setActiveMonth(bestMonth);
-    }
-
-    function setupScrollSpy() {
-      if (scrollSpyObserver) {
-        scrollSpyObserver.disconnect();
-      }
-      Object.keys(visibleMonthCounts).forEach(k => delete visibleMonthCounts[k]);
-
-      if (!('IntersectionObserver' in window)) return;
-
-      scrollSpyObserver = new IntersectionObserver(function(entries) {
-        entries.forEach(entry => {
-          const month = entry.target.dataset.month;
-          if (!month) return;
-          if (entry.isIntersecting) {
-            visibleMonthCounts[month] = (visibleMonthCounts[month] || 0) + 1;
-          } else {
-            visibleMonthCounts[month] = (visibleMonthCounts[month] || 0) - 1;
-            if (visibleMonthCounts[month] <= 0) delete visibleMonthCounts[month];
-          }
-        });
-        updateActiveFromVisible();
-      }, {
-        threshold: 0.1,
-        rootMargin: '-30% 0% -30% 0%'
-      });
-
-      items.forEach(item => {
-        if (item.dataset.month) scrollSpyObserver.observe(item);
-      });
-    }
-
-    function buildHistogram(order) {
-      if (!histogram) return;
-
-      const dated = items.filter(it => it.dataset.month);
-      if (dated.length < 3) {
-        histogram.hidden = true;
-        return;
-      }
-
-      const counts = {};
-      dated.forEach(it => {
-        const k = it.dataset.month;
-        counts[k] = (counts[k] || 0) + 1;
-      });
-
-      let months = Object.keys(counts).sort();
-      if (order === 'newest') months.reverse();
-
-      const maxCount = Math.max.apply(null, Object.values(counts));
-      const minBarPx = 14;
-      const maxBarPx = 60;
-
-      histogram.innerHTML = '';
-      let currentYear = null;
-      let currentGroup = null;
-
-      months.forEach(month => {
-        const year = month.slice(0, 4);
-        if (year !== currentYear) {
-          currentGroup = document.createElement('div');
-          currentGroup.className = 'timeline-year-group';
-          const label = document.createElement('span');
-          label.className = 'timeline-year-label';
-          label.textContent = year;
-          currentGroup.appendChild(label);
-          histogram.appendChild(currentGroup);
-          currentYear = year;
-        }
-
-        const count = counts[month];
-        const widthPx = minBarPx + ((count / maxCount) * (maxBarPx - minBarPx));
-        const bar = document.createElement('a');
-        bar.className = 'timeline-bar';
-        bar.href = '#';
-        bar.style.width = widthPx + 'px';
-        bar.dataset.month = month;
-        bar.dataset.label = formatMonth(month) + ' — ' + count + ' photo' + (count > 1 ? 's' : '');
-        bar.setAttribute('aria-label', bar.dataset.label);
-
-        bar.addEventListener('click', function(e) {
-          e.preventDefault();
-          const target = grid.querySelector('.photo-item[data-month="' + month + '"]');
-          if (target) {
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        });
-
-        currentGroup.appendChild(bar);
-      });
-
-      histogram.hidden = false;
-      setupScrollSpy();
-    }
 
     select.addEventListener('change', function() {
       const order = this.value;
@@ -496,7 +252,6 @@ layout: default
       if (order === 'original') {
         grid.innerHTML = '';
         originalOrder.forEach(item => grid.appendChild(item));
-        buildHistogram('newest');
         return;
       }
 
@@ -513,7 +268,6 @@ layout: default
 
       grid.innerHTML = '';
       items.forEach(item => grid.appendChild(item));
-      buildHistogram(order);
     });
 
     select.dispatchEvent(new Event('change'));
