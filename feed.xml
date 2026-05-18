@@ -1,0 +1,66 @@
+---
+layout: null
+permalink: /feed.xml
+sitemap: false
+---
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="/feed.xsl"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+  <generator uri="https://jekyllrb.com/">Jekyll</generator>
+  <title>{{ site.title | xml_escape }}</title>
+  <subtitle>{{ site.description | strip_newlines | xml_escape }}</subtitle>
+  <link href="{{ '/feed.xml' | absolute_url }}" rel="self" type="application/atom+xml"/>
+  <link href="{{ '/' | absolute_url }}" rel="alternate" type="text/html"/>
+  <updated>{{ site.time | date_to_xmlschema }}</updated>
+  <id>{{ '/' | absolute_url | xml_escape }}</id>
+  <author>
+    <name>{{ site.author | default: site.title | xml_escape }}</name>
+    {% if site.email %}<email>{{ site.email | xml_escape }}</email>{% endif %}
+  </author>
+
+  {% assign photography = site.photography | where_exp: "p", "p.published != false" %}
+  {% if site.journal_enabled %}
+    {% assign journal = site.journal | where_exp: "e", "e.published != false" %}
+    {% assign all_entries = journal | concat: photography | sort: "date" | reverse %}
+  {% else %}
+    {% assign all_entries = photography | sort: "date" | reverse %}
+  {% endif %}
+
+  {% for entry in all_entries limit: 20 %}
+    {% assign entry_url = entry.url | absolute_url %}
+    {% if entry.collection == "photography" %}
+      {% assign entry_title = entry.title %}
+    {% elsif entry.heading %}
+      {% assign entry_title = entry.heading %}
+    {% else %}
+      {% assign entry_title = entry.date | date: "%B %-d, %Y" %}
+    {% endif %}
+    <entry>
+      <id>{{ entry_url | xml_escape }}</id>
+      <title>{{ entry_title | xml_escape }}</title>
+      <link href="{{ entry_url }}" rel="alternate" type="text/html"/>
+      <updated>{{ entry.date | date_to_xmlschema }}</updated>
+      <published>{{ entry.date | date_to_xmlschema }}</published>
+      {% if entry.collection == "photography" %}
+      <category term="photography" label="Photography project"/>
+      {% if entry.blurb %}<summary type="text">{{ entry.blurb | xml_escape }}</summary>{% endif %}
+      <content type="html"><![CDATA[
+        {% if entry.cover %}<p><a href="{{ entry_url }}"><img src="{{ '/assets/photography_lowres/' | append: entry.data_key | append: '/' | append: entry.cover | absolute_url }}" alt="{{ entry_title | escape }}" style="max-width:100%;height:auto;"/></a></p>{% endif %}
+        {% if entry.blurb %}<p>{{ entry.blurb }}</p>{% endif %}
+        <p><a href="{{ entry_url }}">Read the project on tee-udon.github.io →</a></p>
+      ]]></content>
+      {% else %}
+      <category term="journal" label="Journal entry"/>
+      {% assign first_section = entry.sections | first %}
+      {% assign first_photo = first_section.photos | first %}
+      {% assign month = entry.date | date: '%Y/%m' %}
+      {% if first_section.caption %}<summary type="text">{{ first_section.caption | strip_newlines | truncate: 280 | xml_escape }}</summary>{% endif %}
+      <content type="html"><![CDATA[
+        {% if first_photo %}<p><a href="{{ entry_url }}"><img src="{{ '/assets/journal/' | append: month | append: '/' | append: first_photo | absolute_url }}" alt="{{ entry_title | escape }}" style="max-width:100%;height:auto;"/></a></p>{% endif %}
+        {% if first_section.caption %}<p>{{ first_section.caption | strip_newlines }}</p>{% endif %}
+        <p><a href="{{ entry_url }}">Read the journal entry on tee-udon.github.io →</a></p>
+      ]]></content>
+      {% endif %}
+    </entry>
+  {% endfor %}
+</feed>

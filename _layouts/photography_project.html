@@ -9,28 +9,37 @@ layout: default
   <div class="post-content">
     {{ content }}
 
-{% assign photos = site.data.photography[page.data_key] %}
-{% assign featured_photos = photos | where: "featured", true %}
+{% assign project_path = "/assets/photography_lowres/" | append: page.data_key | append: "/" %}
+{% assign metadata = site.data.photography[page.data_key] %}
+{% assign project_files = site.static_files | where_exp: "f", "f.path contains project_path" | sort: "name" %}
+{% if metadata %}
+  {% assign meta_filenames = metadata | map: "filename" %}
+{% else %}
+  {% assign meta_filenames = "" | split: "" %}
+{% endif %}
 
-{% if featured_photos.size > 0 %}
-  <h2 style="margin-top: 40px;">Selected Moments</h2>
-  <div class="photo-grid" id="featured-grid-container" style="margin-bottom: 50px;">
-    {% for photo in featured_photos %}
-    <div class="photo-item">
-      <div class="image-wrapper">
-        <img src="/assets/photography_lowres/{{ photo.filename }}" alt="{{ photo.location }}">
-        <div class="shield"></div>
+{% if metadata %}
+  {% assign featured_photos = metadata | where: "featured", true %}
+  {% if featured_photos.size > 0 %}
+    <h2 style="margin-top: 40px;">Selected Moments</h2>
+    <div class="photo-grid" id="featured-grid-container" style="margin-bottom: 50px;">
+      {% for photo in featured_photos %}
+      <div class="photo-item">
+        <div class="image-wrapper">
+          <img src="{{ project_path }}{{ photo.filename }}" alt="{{ photo.location }}">
+          <div class="shield"></div>
+        </div>
+        <div class="caption">
+          <p>
+            {{ photo.location }}<br>
+            {{ photo.date | date: "%B %Y" }}
+          </p>
+        </div>
       </div>
-      <div class="caption">
-        <p>
-          {{ photo.location }}<br>
-          {{ photo.date | date: "%B %Y" }}
-        </p>
-      </div>
+      {% endfor %}
     </div>
-    {% endfor %}
-  </div>
-  <hr>
+    <hr>
+  {% endif %}
 {% endif %}
 
 <h2 style="margin-top: 40px;">All Moments</h2>
@@ -44,18 +53,30 @@ layout: default
 </div>
 
 <div class="photo-grid" id="photo-grid-container">
-  {% for photo in photos %}
-  <div class="photo-item" data-timestamp="{{ photo.date | date: '%s' }}">
-    <div class="image-wrapper">
-      <img src="/assets/photography_lowres/{{ photo.filename }}" alt="{{ photo.location }}">
-      <div class="shield"></div>
-    </div>
+  {% if metadata %}
+    {% for photo in metadata %}
+    <div class="photo-item" data-timestamp="{% if photo.date %}{{ photo.date | date: '%s' }}{% else %}0{% endif %}">
+      <div class="image-wrapper">
+        <img src="{{ project_path }}{{ photo.filename }}" alt="{{ photo.location }}">
+        <div class="shield"></div>
+      </div>
 
-    <div class="caption">
-      <p class="loc" title="{{ photo.location }}">{{ photo.location }}</p>
-      <p class="date">{{ photo.date | date: "%B %Y" }}</p>
+      <div class="caption">
+        <p class="loc" title="{{ photo.location }}">{{ photo.location }}</p>
+        <p class="date">{{ photo.date | date: "%B %Y" }}</p>
+      </div>
     </div>
-  </div>
+    {% endfor %}
+  {% endif %}
+  {% for file in project_files %}
+    {% unless meta_filenames contains file.name %}
+    <div class="photo-item" data-timestamp="0">
+      <div class="image-wrapper">
+        <img src="{{ file.path }}" alt="">
+        <div class="shield"></div>
+      </div>
+    </div>
+    {% endunless %}
   {% endfor %}
 </div>
 

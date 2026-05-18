@@ -18,15 +18,21 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-# title: Tee Udomlumleart
-# email: teeu@stanford.edu
-# description: >- # this means to ignore newlines until "baseurl:"
-#   Write an awesome description for your new site here. You can edit this
-#   line in _config.yml. It will appear in your document head meta (for
-#   Google search results) and in your feed.xml site description.
-# baseurl: "" # the subpath of your site, e.g. /blog
-# url: "" # the base hostname & protocol for your site, e.g. http://example.com
-# github_username: tee-udon
+title: Tee Udomlumleart
+author: Tee Udomlumleart
+email: teeu@stanford.edu
+description: >-
+  Photography projects by Tee Udomlumleart.
+baseurl: ""
+url: "https://tee-udon.github.io"
+github_username: tee-udon
+
+journal_enabled: false
+
+header_pages:
+  - index.markdown
+  - photography.markdown
+  - subscribe.markdown
 
 # Build settings
 theme: minima
@@ -37,6 +43,9 @@ collections:
   photography:
     output: true
     permalink: /photography/:path/
+  journal:
+    output: false
+    permalink: /photography/journal/:path/
 
 defaults:
   - scope:
@@ -44,6 +53,11 @@ defaults:
       type: photography
     values:
       layout: photography_project
+  - scope:
+      path: ""
+      type: journal
+    values:
+      layout: journal_entry
 
 # Exclude from processing.
 # The following items will not be processed, by default.

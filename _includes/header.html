@@ -1,0 +1,159 @@
+<header class="site-header" role="banner">
+  <div class="wrapper site-header-inner">
+    <a class="site-title" rel="author" href="{{ '/' | relative_url }}">{{ site.title | escape }}</a>
+
+    <nav class="site-menu" aria-label="Primary">
+      <button
+        type="button"
+        class="site-menu-trigger"
+        id="site-menu-trigger"
+        aria-haspopup="true"
+        aria-expanded="false"
+        aria-controls="site-menu-panel"
+        aria-label="Open menu"
+      >
+        <svg class="site-menu-icon" viewBox="0 0 18 15" width="22" height="18" aria-hidden="true" focusable="false">
+          <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+        </svg>
+      </button>
+
+      <div class="site-menu-panel" id="site-menu-panel" role="menu" hidden>
+        {%- assign default_paths = site.pages | map: "path" -%}
+        {%- assign page_paths = site.header_pages | default: default_paths -%}
+        {%- for path in page_paths -%}
+          {%- assign my_page = site.pages | where: "path", path | first -%}
+          {%- if my_page.title -%}
+            <a class="site-menu-link" role="menuitem" href="{{ my_page.url | relative_url }}">{{ my_page.title | escape }}</a>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </nav>
+  </div>
+</header>
+
+<style>
+  /* Suppress minima's default nav, which we're replacing entirely */
+  .site-header .site-nav { display: none !important; }
+
+  /* Flex layout for the header row; override minima's float on .site-title */
+  .site-header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+  }
+
+  .site-header .site-title {
+    float: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .site-menu {
+    position: relative;
+    line-height: 1;
+    margin-left: auto; /* defensive: pushes menu to right edge inside the wrapper */
+  }
+
+  .site-menu-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid transparent;
+    color: #424242;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+
+  .site-menu-trigger:hover,
+  .site-menu-trigger[aria-expanded="true"] {
+    background: #f5f5f5;
+    border-color: #e0e0e0;
+    color: #000;
+  }
+
+  .site-menu-trigger:focus-visible {
+    outline: 2px solid #888;
+    outline-offset: 2px;
+  }
+
+  .site-menu-icon {
+    display: block;
+    fill: currentColor;
+  }
+
+  .site-menu-panel {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 200px;
+    max-width: calc(100vw - 32px);
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 6px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    padding: 6px 0;
+    z-index: 10;
+  }
+
+  .site-menu-panel[hidden] {
+    display: none;
+  }
+
+  .site-menu-link {
+    display: block;
+    padding: 8px 18px;
+    color: #424242;
+    font-size: 0.95em;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .site-menu-link:hover,
+  .site-menu-link:focus-visible {
+    background: #f7f7f7;
+    color: #000;
+    text-decoration: none;
+    outline: none;
+  }
+</style>
+
+<script>
+  (function () {
+    var trigger = document.getElementById('site-menu-trigger');
+    var panel = document.getElementById('site-menu-panel');
+    if (!trigger || !panel) return;
+
+    function setOpen(open) {
+      trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      trigger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      if (open) {
+        panel.removeAttribute('hidden');
+      } else {
+        panel.setAttribute('hidden', '');
+      }
+    }
+
+    trigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var isOpen = trigger.getAttribute('aria-expanded') === 'true';
+      setOpen(!isOpen);
+    });
+
+    document.addEventListener('click', function (e) {
+      if (trigger.getAttribute('aria-expanded') !== 'true') return;
+      if (panel.contains(e.target) || trigger.contains(e.target)) return;
+      setOpen(false);
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && trigger.getAttribute('aria-expanded') === 'true') {
+        setOpen(false);
+        trigger.focus();
+      }
+    });
+  })();
+</script>

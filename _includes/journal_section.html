@@ -1,0 +1,25 @@
+{% assign s = include.section %}
+{% assign month = include.date | date: '%Y/%m' %}
+{% assign photo_count = s.photos | size %}
+{% assign h = include.heading | default: "h2" %}
+
+<section class="journal-section">
+  {% if s.title %}<{{ h }} class="journal-section-title">{{ s.title }}</{{ h }}>{% endif %}
+
+  {% if photo_count > 0 %}
+    <div class="journal-photos" data-count="{{ photo_count }}">
+      {% for photo in s.photos %}
+        <div class="journal-photo">
+          <div class="image-wrapper">
+            <img src="{{ '/assets/journal/' | append: month | append: '/' | append: photo | relative_url }}" alt="{{ s.title | default: '' | escape }}">
+            <div class="shield"></div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {% if s.caption %}
+    <div class="journal-caption">{{ s.caption | markdownify }}</div>
+  {% endif %}
+</section>

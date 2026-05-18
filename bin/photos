@@ -1,0 +1,296 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+#
+# Photography metadata tool.
+#
+# Usage:
+#   bundle exec ruby bin/photos status            # Counts per project
+#   bundle exec ruby bin/photos fix-dates [--dry] # Replace 2026-01-01 with detected dates
+#   bundle exec ruby bin/photos caption [project] # Interactively caption photos missing metadata
+#   bundle exec ruby bin/photos help
+#
+# Date detection order: filename pattern (IMG_YYYYMMDD_HHMMSS) → EXIF DateTimeOriginal.
+
+require "base64"
+require "date"
+
+ROOT       = File.expand_path("..", __dir__)
+ASSETS_DIR = File.join(ROOT, "assets/photography_lowres")
+DATA_DIR   = File.join(ROOT, "_data/photography")
+PLACEHOLDER_DATE = "2026-01-01"
+
+begin
+  require "exifr/jpeg"
+  HAS_EXIFR = true
+rescue LoadError
+  HAS_EXIFR = false
+end
+
+# Terminals that support iTerm2's inline image escape sequence.
+# Set PHOTOS_NO_INLINE=1 to force-disable.
+INLINE_IMAGE_TERMS = %w[iTerm.app vscode WarpTerminal ghostty].freeze
+
+def inline_image_supported?
+  return false if ENV["PHOTOS_NO_INLINE"] == "1"
+  INLINE_IMAGE_TERMS.include?(ENV["TERM_PROGRAM"])
+end
+
+# Render an image inline using the iTerm2 protocol. height is in terminal
+# rows. Returns true on success, false if the terminal isn't supported.
+def render_inline_image(filepath, height_rows: 14)
+  return false unless inline_image_supported?
+  return false unless File.exist?(filepath)
+  content = File.binread(filepath)
+  encoded = Base64.strict_encode64(content)
+  print "\e]1337;File=inline=1;height=#{height_rows};preserveAspectRatio=1:#{encoded}\a"
+  puts
+  true
+rescue StandardError
+  false
+end
+
+def projects
+  Dir.children(ASSETS_DIR)
+     .select { |f| File.directory?(File.join(ASSETS_DIR, f)) }
+     .sort
+end
+
+def photo_files(project)
+  Dir.children(File.join(ASSETS_DIR, project))
+     .select { |f| f.match?(/\.(jpe?g|png)$/i) }
+     .sort
+end
+
+def yaml_path(project)
+  File.join(DATA_DIR, "#{project}.yml")
+end
+
+# Lightweight parser for our simple `- key: value` YAML files. Returns an
+# array of hashes keyed by string field name. Good enough for our schema;
+# does not handle multi-line scalars or nested structures.
+def parse_yaml_entries(project)
+  path = yaml_path(project)
+  return [] unless File.exist?(path)
+
+  entries = []
+  current = nil
+  File.foreach(path) do |line|
+    next if line.strip.start_with?("#") || line.strip.empty?
+
+    if line =~ /^- (\w+):\s*(.*?)\s*$/
+      entries << current if current
+      current = { $1 => $2 }
+    elsif line =~ /^\s+(\w+):\s*(.*?)\s*$/ && current
+      current[$1] = $2
+    end
+  end
+  entries << current if current
+  entries
+end
+
+def filename_to_date(filename)
+  if filename =~ /(\d{4})(\d{2})(\d{2})_(\d{2})(\d{2})(\d{2})/
+    Date.new($1.to_i, $2.to_i, $3.to_i) rescue nil
+  end
+end
+
+def exif_to_date(filepath)
+  return nil unless HAS_EXIFR && filepath.match?(/\.jpe?g$/i)
+  EXIFR::JPEG.new(filepath).date_time_original&.to_date
+rescue StandardError
+  nil
+end
+
+def detect_date(project, filename)
+  filename_to_date(filename) ||
+    exif_to_date(File.join(ASSETS_DIR, project, filename))
+end
+
+# Quote a string as a YAML double-quoted scalar (always safe).
+def yq(value)
+  '"' + value.to_s.gsub("\\", "\\\\").gsub('"', '\\"') + '"'
+end
+
+# --- Commands ---------------------------------------------------------
+
+def cmd_status
+  projects.each do |project|
+    files = photo_files(project)
+    entries = parse_yaml_entries(project)
+    entry_names = entries.map { |e| e["filename"] }
+
+    missing = files - entry_names
+    orphans = entry_names - files
+    placeholders = entries.count { |e| e["date"] == PLACEHOLDER_DATE }
+
+    puts "[#{project}]"
+    puts "  files in folder:       #{files.size}"
+    puts "  YAML entries:          #{entries.size}"
+    puts "  files without entry:   #{missing.size}"
+    puts "  entries with no file:  #{orphans.size}" if orphans.size > 0
+    puts "  placeholder dates:     #{placeholders}" if placeholders > 0
+    puts
+  end
+end
+
+def cmd_fix_dates(dry_run: false)
+  warn "Note: exifr not loaded — only filenames with embedded dates will be fixable." unless HAS_EXIFR
+
+  total_fixed = 0
+  total_unfixable = 0
+
+  projects.each do |project|
+    path = yaml_path(project)
+    next unless File.exist?(path)
+
+    lines = File.readlines(path)
+    fixed = 0
+    unfixable = 0
+    current_filename = nil
+
+    lines.each_with_index do |line, i|
+      if line =~ /^- filename:\s*(.*?)\s*$/
+        current_filename = $1
+      elsif current_filename && line =~ /^(\s+)date:\s*#{Regexp.escape(PLACEHOLDER_DATE)}\s*$/
+        indent = $1
+        detected = detect_date(project, current_filename)
+        if detected
+          new_line = "#{indent}date: #{detected.strftime('%Y-%m-%d')}\n"
+          if dry_run
+            puts "[#{project}] #{current_filename}: #{PLACEHOLDER_DATE} → #{detected.strftime('%Y-%m-%d')}"
+          else
+            lines[i] = new_line
+          end
+          fixed += 1
+        else
+          unfixable += 1
+        end
+      end
+    end
+
+    File.write(path, lines.join) if fixed > 0 && !dry_run
+
+    puts "[#{project}] fixed #{fixed}, unchanged #{unfixable}#{dry_run ? ' (dry-run)' : ''}"
+    total_fixed += fixed
+    total_unfixable += unfixable
+  end
+
+  puts
+  puts "Total: #{total_fixed} fixed, #{total_unfixable} could not detect date"
+  puts "(Run `bundle install` to enable EXIF for the unchanged ones.)" unless HAS_EXIFR
+end
+
+def prompt(label, default = nil)
+  if default
+    print "  #{label} [#{default}]: "
+  else
+    print "  #{label}: "
+  end
+  $stdout.flush
+  line = $stdin.gets
+  return :eof if line.nil?
+  text = line.chomp
+  return default if text.empty?
+  text
+end
+
+def append_yaml_entry(path, filename:, location:, date:, featured:)
+  needs_blank_line = File.exist?(path) && File.size(path) > 0 && !File.read(path).end_with?("\n\n")
+  File.open(path, "a") do |f|
+    f.puts if needs_blank_line
+    f.puts "- filename: #{filename}"
+    f.puts "  location: #{yq(location)}"
+    f.puts "  date: #{date}"
+    f.puts "  featured: true" if featured
+  end
+end
+
+def cmd_caption(project_filter = nil)
+  targets = project_filter ? [project_filter] : projects
+  unknown = targets - projects
+  unless unknown.empty?
+    warn "Unknown project(s): #{unknown.join(', ')}"
+    warn "Known: #{projects.join(', ')}"
+    exit 1
+  end
+
+  targets.each do |project|
+    files = photo_files(project)
+    entries = parse_yaml_entries(project)
+    missing = files - entries.map { |e| e["filename"] }
+
+    if missing.empty?
+      puts "[#{project}] nothing to caption"
+      next
+    end
+
+    puts
+    puts "=" * 60
+    puts "[#{project}] #{missing.size} photo(s) to caption"
+    puts "=" * 60
+    puts "Press Enter on Location to skip a photo. Ctrl-C to quit (saved entries persist)."
+    puts
+
+    path = yaml_path(project)
+
+    missing.each_with_index do |filename, i|
+      filepath = File.join(ASSETS_DIR, project, filename)
+      detected = detect_date(project, filename)
+
+      puts "[#{i + 1}/#{missing.size}] #{filename}"
+      rendered = render_inline_image(filepath)
+      puts "  file://#{filepath}" unless rendered
+
+      location = prompt("Location (Enter to skip)")
+      return if location == :eof
+      next if location.nil? || location.empty?
+
+      date = prompt("Date (YYYY-MM-DD)", detected&.strftime("%Y-%m-%d"))
+      return if date == :eof
+      if date.nil? || date.empty?
+        puts "  skipped (no date)"
+        puts
+        next
+      end
+
+      featured_input = prompt("Featured? (y/N)", "n")
+      return if featured_input == :eof
+      featured = %w[y yes].include?(featured_input.to_s.strip.downcase)
+
+      append_yaml_entry(path, filename: filename, location: location, date: date, featured: featured)
+      puts "  saved"
+      puts
+    end
+  end
+end
+
+# --- Dispatch ---------------------------------------------------------
+
+cmd, *rest = ARGV
+
+case cmd
+when "status"
+  cmd_status
+when "fix-dates"
+  cmd_fix_dates(dry_run: rest.include?("--dry") || rest.include?("--dry-run"))
+when "caption"
+  cmd_caption(rest.first)
+when nil, "help", "--help", "-h"
+  puts <<~HELP
+    Photography metadata tool.
+
+    Commands:
+      status               Print per-project counts (files, entries, placeholders)
+      fix-dates [--dry]    Replace #{PLACEHOLDER_DATE} placeholders with detected dates
+      caption [project]    Walk through uncaptioned photos and prompt for metadata
+      help                 This message
+
+    Date detection: filename pattern (IMG_YYYYMMDD_HHMMSS) first, then EXIF.
+
+    Run via: bundle exec ruby bin/photos <command>
+  HELP
+else
+  warn "Unknown command: #{cmd.inspect}"
+  warn "Try: bundle exec ruby bin/photos help"
+  exit 1
+end

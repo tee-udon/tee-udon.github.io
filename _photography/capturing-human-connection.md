@@ -1,5 +1,6 @@
 ---
 title: In Passing
+date: 2026-04-20
 cover: IMG_2908.jpeg
 blurb: Looking for landscapes in San Francisco, finding people instead.
 data_key: capturing-human-connection

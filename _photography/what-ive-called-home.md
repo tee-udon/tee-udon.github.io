@@ -1,5 +1,6 @@
 ---
 title: What I've Called Home
+date: 2026-04-18
 cover: IMG_7205 Large.jpeg
 blurb: Places and people I've called home across the last several years. What stays, what shifts, and what a photograph can hold when a home begins to change.
 data_key: what-ive-called-home

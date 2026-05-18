@@ -12,3 +12,5 @@ Epigraph: WS Merwin Separation
 - I cannot hold my rlationship or friendship for long because I cannot imagine losing them
   - Take them for granted. 
 - This work explores what is feels to lose someone
+- LINGER A LITTLE LONGER TO SEE WHEN THE MOMENTS END
+- what it feels like after the moment ends 

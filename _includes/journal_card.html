@@ -1,0 +1,16 @@
+{% assign entry = include.entry %}
+{% assign first_section = entry.sections | first %}
+{% assign first_photo = first_section.photos | first %}
+{% assign month = entry.date | date: '%Y/%m' %}
+
+<a href="{{ entry.url | relative_url }}" class="journal-card">
+  {% if first_photo %}
+    <div class="journal-cover">
+      <img src="{{ '/assets/journal/' | append: month | append: '/' | append: first_photo | relative_url }}" alt="">
+    </div>
+  {% endif %}
+  <div class="journal-meta">
+    <time>{{ entry.date | date: "%B %-d, %Y" }}</time>
+    {% if entry.heading %}<span class="journal-card-title">{{ entry.heading }}</span>{% endif %}
+  </div>
+</a>

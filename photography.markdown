@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Photography
+title: Photography Projects
 permalink: /photography/
 ---
 
@@ -15,13 +15,30 @@ But not everything in life can be explained by logic. Connecting with strangers.
   {% for project in projects %}
   <a href="{{ project.url | relative_url }}" class="project-card">
     <div class="project-cover">
-      <img src="/assets/photography_lowres/{{ project.cover }}" alt="{{ project.title }}">
+      <img src="/assets/photography_lowres/{{ project.data_key }}/{{ project.cover }}" alt="{{ project.title }}">
     </div>
     <h2 class="project-title">{{ project.title }}</h2>
     {% if project.blurb %}<p class="project-blurb">{{ project.blurb }}</p>{% endif %}
   </a>
   {% endfor %}
 </div>
+
+{% if site.journal_enabled %}
+{% assign recent_journal = site.journal | sort: "date" | reverse %}
+{% if recent_journal.size > 0 %}
+<section class="journal-teaser">
+  <div class="journal-teaser-header">
+    <h2>Journal</h2>
+    <a href="{{ '/photography/journal/' | relative_url }}" class="journal-see-all">See all entries →</a>
+  </div>
+  <div class="journal-strip">
+    {% for entry in recent_journal limit: 3 %}
+      {% include journal_card.html entry=entry %}
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+{% endif %}
 
 <style>
   .project-grid {
@@ -63,5 +80,71 @@ But not everything in life can be explained by logic. Connecting with strangers.
     margin: 0 16px 16px;
     color: #555;
     font-size: 0.95em;
+  }
+
+  .journal-teaser {
+    margin-top: 60px;
+    padding-top: 40px;
+    border-top: 1px solid #eee;
+  }
+
+  .journal-teaser-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 24px;
+  }
+
+  .journal-teaser-header h2 {
+    margin: 0;
+  }
+
+  .journal-see-all {
+    font-size: 0.95em;
+  }
+
+  .journal-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+  }
+
+  .journal-card {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    overflow: hidden;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .journal-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    text-decoration: none;
+  }
+
+  .journal-cover img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .journal-meta {
+    padding: 12px 14px;
+  }
+
+  .journal-meta time {
+    display: block;
+    color: #888;
+    font-size: 0.85em;
+  }
+
+  .journal-card-title {
+    display: block;
+    font-size: 1em;
+    margin-top: 4px;
   }
 </style>

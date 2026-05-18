@@ -1,0 +1,33 @@
+{% assign entry = include.entry %}
+{% assign linked = include.linked %}
+{% assign page_layout = include.page_layout %}
+{% assign heading_text = entry.heading %}
+{% assign date_text = entry.date | date: "%B %-d, %Y" %}
+
+{% if page_layout %}
+  {% assign top_tag = "h1" %}
+{% else %}
+  {% assign top_tag = "h2" %}
+{% endif %}
+
+<header class="journal-day-header">
+  {% if heading_text %}
+    <time datetime="{{ entry.date | date: '%Y-%m-%d' }}">
+      {% if linked %}<a href="{{ entry.url | relative_url }}">{{ date_text }}</a>{% else %}{{ date_text }}{% endif %}
+    </time>
+    <{{ top_tag }} class="journal-day-title">
+      {% if linked %}<a href="{{ entry.url | relative_url }}">{{ heading_text }}</a>{% else %}{{ heading_text }}{% endif %}
+    </{{ top_tag }}>
+  {% else %}
+    <{{ top_tag }} class="journal-day-title journal-day-date-only">
+      {% if linked %}<a href="{{ entry.url | relative_url }}"><time datetime="{{ entry.date | date: '%Y-%m-%d' }}">{{ date_text }}</time></a>{% else %}<time datetime="{{ entry.date | date: '%Y-%m-%d' }}">{{ date_text }}</time>{% endif %}
+    </{{ top_tag }}>
+  {% endif %}
+</header>
+
+{% assign section_heading = "h3" %}
+{% if page_layout %}{% assign section_heading = "h2" %}{% endif %}
+
+{% for section in entry.sections %}
+  {% include journal_section.html section=section date=entry.date heading=section_heading %}
+{% endfor %}

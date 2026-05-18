@@ -1,0 +1,196 @@
+---
+layout: default
+---
+<article class="journal-entry">
+  <p class="back-link">
+    <a href="{{ '/photography/journal/' | relative_url }}">← Journal</a>
+  </p>
+
+  {% include journal_day.html entry=page page_layout=true %}
+
+  {% if content != "" %}
+    <div class="journal-body">
+      {{ content }}
+    </div>
+  {% endif %}
+
+  {% assign all_entries = site.journal | sort: "date" %}
+  {% assign current_index = -1 %}
+  {% for entry in all_entries %}
+    {% if entry.url == page.url %}
+      {% assign current_index = forloop.index0 %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+
+  {% if current_index >= 0 %}
+    {% assign prev_index = current_index | minus: 1 %}
+    {% assign next_index = current_index | plus: 1 %}
+    <nav class="entry-nav">
+      <div class="entry-nav-prev">
+        {% if prev_index >= 0 %}
+          {% assign prev_entry = all_entries[prev_index] %}
+          <a href="{{ prev_entry.url | relative_url }}">
+            <span class="entry-nav-label">← Older</span>
+            <span class="entry-nav-title">{{ prev_entry.date | date: "%B %-d, %Y" }}{% if prev_entry.heading %} — {{ prev_entry.heading }}{% endif %}</span>
+          </a>
+        {% endif %}
+      </div>
+      <div class="entry-nav-next">
+        {% if next_index < all_entries.size %}
+          {% assign next_entry = all_entries[next_index] %}
+          <a href="{{ next_entry.url | relative_url }}">
+            <span class="entry-nav-label">Newer →</span>
+            <span class="entry-nav-title">{{ next_entry.date | date: "%B %-d, %Y" }}{% if next_entry.heading %} — {{ next_entry.heading }}{% endif %}</span>
+          </a>
+        {% endif %}
+      </div>
+    </nav>
+  {% endif %}
+</article>
+
+<style>
+  .back-link {
+    margin-bottom: 24px;
+    font-size: 0.95em;
+  }
+
+  .journal-day-header {
+    margin-bottom: 32px;
+  }
+
+  .journal-day-header time {
+    display: block;
+    color: #888;
+    font-size: 0.95em;
+    margin-bottom: 4px;
+  }
+
+  .journal-day-title {
+    margin: 0;
+    font-size: 2em;
+  }
+
+  .journal-section {
+    margin-bottom: 48px;
+  }
+
+  .journal-section-title {
+    font-size: 1.3em;
+    margin: 0 0 16px;
+    font-weight: 600;
+  }
+
+  .journal-photos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .journal-photos[data-count="1"] {
+    grid-template-columns: 1fr;
+  }
+
+  .journal-photos[data-count="1"] .journal-photo img {
+    height: auto;
+    max-height: 600px;
+  }
+
+  .journal-photo img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .image-wrapper {
+    position: relative;
+    display: block;
+    width: 100%;
+  }
+
+  .shield {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+  }
+
+  img {
+    -webkit-user-drag: none;
+    user-drag: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .journal-caption {
+    color: #333;
+    line-height: 1.6;
+  }
+
+  .journal-caption p {
+    margin: 0 0 12px;
+  }
+
+  .journal-caption p:last-child {
+    margin-bottom: 0;
+  }
+
+  .journal-body {
+    margin-top: 32px;
+    color: #333;
+    line-height: 1.6;
+  }
+
+  .entry-nav {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 60px;
+    padding-top: 24px;
+    border-top: 1px solid #eee;
+  }
+
+  .entry-nav-prev,
+  .entry-nav-next {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .entry-nav-next {
+    text-align: right;
+  }
+
+  .entry-nav a {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .entry-nav a:hover .entry-nav-title {
+    text-decoration: underline;
+  }
+
+  .entry-nav-label {
+    display: block;
+    font-size: 0.85em;
+    color: #888;
+    margin-bottom: 4px;
+  }
+
+  .entry-nav-title {
+    display: block;
+    font-size: 1em;
+  }
+</style>
+
+<script>
+  document.addEventListener('contextmenu', function(e) {
+    if (e.target.tagName === 'IMG') {
+      e.preventDefault();
+    }
+  });
+</script>
