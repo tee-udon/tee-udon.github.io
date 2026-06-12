@@ -285,7 +285,7 @@
   date: 2026-05-15
 
 - filename: IMG_1388.jpg
-  location: Oakland Harbor, Oakland
+  location: California Ave Caltrain Station, Palo Alto
   date: 2026-05-15
 
 
@@ -449,3 +449,30 @@
 - filename: IMG_9766.jpg
   location: "Escondido Village, Stanford"
   date: 2026-04-27
+
+- filename: IMG_4280-2.jpg
+  location: "Sightglass Coffee, 20th St, Mission District"
+  date: 2026-05-30
+  featured: true
+
+- filename: IMG_4313-2.jpg
+  location: "21th and Valencia, Mission District"
+  date: 2026-05-30
+  featured: true
+
+- filename: IMG_4680-2.jpg
+  location: "Mission Dolores Park, Mission District"
+  date: 2026-05-30
+
+- filename: IMG_4834-2.jpg
+  location: "Mission Dolores Park, Mission District"
+  date: 2026-05-30
+
+- filename: IMG_4911-2.jpg
+  location: "Mission Dolores Park, Mission District"
+  date: 2026-05-30
+  featured: true
+
+- filename: IMG_5145-2.jpg
+  location: "Alta Plaza Park, Pacific Heights"
+  date: 2026-05-30
