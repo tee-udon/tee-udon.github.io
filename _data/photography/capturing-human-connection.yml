@@ -517,3 +517,30 @@
 - filename: IMG_4191.jpg
   location: "Fingersnaps, 20th St, Mission District"
   date: 2026-05-29
+
+- filename: IMG_4659.jpg
+  location: "California Ave Caltrain Station, Palo Alto"
+  date: 2026-02-21
+  featured: true
+
+- filename: IMG_8311 Large.jpeg
+  location: "Ronald Reagan International Airport, Washington DC"
+  date: 2026-04-05
+  featured: true
+
+- filename: IMG_8316 Large.jpeg
+  location: "Ronald Reagan International Airport, Washington DC"
+  date: 2026-04-05
+  featured: true
+
+- filename: IMG_8319 Large.jpeg
+  location: "Ronald Reagan International Airport, Washington DC"
+  date: 2026-04-05
+
+- filename: IMG_8328 Large.jpeg
+  location: "Ronald Reagan International Airport, Washington DC"
+  date: 2026-04-05
+
+- filename: IMG_8355 Large.jpeg
+  location: "San Francisco International Airport, California"
+  date: 2026-04-05
