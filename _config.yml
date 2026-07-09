@@ -41,9 +41,7 @@ plugins:
   - jekyll-sitemap
   - jekyll-seo-tag
 
-# Paste the token from Google Search Console (HTML tag method, content="...")
-# to verify site ownership, then rebuild:
-# google_site_verification: TOKEN_GOES_HERE
+google_site_verification: mNB7f-pmErYkbRno2MD-a1pv6-oDc6InJSaOl9RRY3c
 
 exclude:
   - bin/
