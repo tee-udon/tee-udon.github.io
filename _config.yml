@@ -36,8 +36,18 @@ header_pages:
 
 # Build settings
 theme: minima
-# plugins:
-#   - jekyll-feed
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Paste the token from Google Search Console (HTML tag method, content="...")
+# to verify site ownership, then rebuild:
+# google_site_verification: TOKEN_GOES_HERE
+
+exclude:
+  - bin/
+  - vendor/
 
 collections:
   photography:

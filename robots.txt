@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://tee-udon.github.io/sitemap.xml
