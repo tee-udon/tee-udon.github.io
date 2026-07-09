@@ -9,7 +9,11 @@ layout: default
   <div class="post-content">
     {{ content }}
 
+<p style="color: #999; font-size: 0.85em; margin-top: 28px;">Click any photo to view it larger</p>
+
 {% assign project_path = "/assets/photography_lowres/" | append: page.data_key | append: "/" %}
+{% assign display_path = "/assets/photography_display/" | append: page.data_key | append: "/" %}
+{% assign display_files = site.static_files | where_exp: "f", "f.path contains display_path" | map: "name" %}
 {% assign metadata = site.data.photography[page.data_key] %}
 {% assign project_files = site.static_files | where_exp: "f", "f.path contains project_path" | sort: "name" %}
 {% if metadata %}
@@ -24,7 +28,10 @@ layout: default
     <h2 style="margin-top: 40px;">Selected Moments</h2>
     <div class="photo-grid" id="featured-grid-container" style="margin-bottom: 50px;">
       {% for photo in featured_photos %}
-      <div class="photo-item">
+      <div class="photo-item"
+           data-location="{{ photo.location | escape }}"
+           data-datelabel="{{ photo.date | date: '%B %Y' }}"
+           {% if display_files contains photo.filename %}data-full="{{ display_path }}{{ photo.filename }}"{% endif %}>
         <div class="image-wrapper">
           <img src="{{ project_path }}{{ photo.filename }}" alt="{{ photo.location }}">
           <div class="shield"></div>
@@ -59,7 +66,10 @@ layout: default
     {% for photo in metadata %}
     <div class="photo-item"
          data-timestamp="{% if photo.date %}{{ photo.date | date: '%s' }}{% else %}0{% endif %}"
-         {% if photo.date %}data-month="{{ photo.date | date: '%Y-%m' }}"{% endif %}>
+         {% if photo.date %}data-month="{{ photo.date | date: '%Y-%m' }}"{% endif %}
+         data-location="{{ photo.location | escape }}"
+         data-datelabel="{{ photo.date | date: '%B %Y' }}"
+         {% if display_files contains photo.filename %}data-full="{{ display_path }}{{ photo.filename }}"{% endif %}>
       <div class="image-wrapper">
         <img src="{{ project_path }}{{ photo.filename }}" alt="{{ photo.location }}">
         <div class="shield"></div>
@@ -74,7 +84,8 @@ layout: default
   {% endif %}
   {% for file in project_files %}
     {% unless meta_filenames contains file.name %}
-    <div class="photo-item" data-timestamp="0">
+    <div class="photo-item" data-timestamp="0"
+         {% if display_files contains file.name %}data-full="{{ display_path }}{{ file.name }}"{% endif %}>
       <div class="image-wrapper">
         <img src="{{ file.path }}" alt="">
         <div class="shield"></div>
@@ -489,3 +500,5 @@ layout: default
     select.dispatchEvent(new Event('change'));
   });
 </script>
+
+{% include photo_lightbox.html %}
