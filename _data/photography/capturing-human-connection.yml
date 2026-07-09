@@ -544,3 +544,37 @@
 - filename: IMG_8355 Large.jpeg
   location: "San Francisco International Airport, California"
   date: 2026-04-05
+
+- filename: IMG_5247-2.jpg
+  location: "Stockton St, Chinatown"
+  date: 2026-06-06
+  featured: true
+
+- filename: IMG_5317-2.jpg
+  location: "Saints Peter and Paul School, Filbert St, North Beach"
+  date: 2026-06-06
+
+- filename: IMG_5337-2.jpg
+  location: "Saints Peter and Paul School, Filbert St, North Beach"
+  date: 2026-06-06
+
+- filename: IMG_5673.jpg
+  location: "Dudley Ln, Stanford"
+  date: 2026-07-08
+
+- filename: IMG_5675.jpg
+  location: "Dudley Ln, Stanford"
+  date: 2026-07-08
+
+- filename: IMG_5683.jpg
+  location: "Dudley Ln, Stanford"
+  date: 2026-07-08
+
+- filename: IMG_5706.jpg
+  location: "Jane Stanford Wy, Stanford"
+  date: 2026-07-08
+
+- filename: IMG_5724.jpg
+  location: "Jane Stanford Wy, Stanford"
+  date: 2026-07-08
+  featured: true
