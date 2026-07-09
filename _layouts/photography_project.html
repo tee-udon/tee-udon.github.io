@@ -19,7 +19,7 @@ layout: default
 {% endif %}
 
 {% if metadata %}
-  {% assign featured_photos = metadata | where: "featured", true %}
+  {% assign featured_photos = metadata | where: "featured", true | sort: "date" | reverse %}
   {% if featured_photos.size > 0 %}
     <h2 style="margin-top: 40px;">Selected Moments</h2>
     <div class="photo-grid" id="featured-grid-container" style="margin-bottom: 50px;">
