@@ -88,12 +88,66 @@ def read_orientation(path):
     return 1
 
 
-def exif_date(path):
-    """Capture date as YYYY-MM-DD via sips' creation property, or None."""
+def _jpeg_date_time_original(path):
+    """DateTimeOriginal (0x9003) from a JPEG's Exif sub-IFD, or None."""
+    if not path.lower().endswith((".jpg", ".jpeg")):
+        return None
+    with open(path, "rb") as fh:
+        data = fh.read(256 * 1024)
     try:
-        out = subprocess.run(["sips", "-g", "creation", path],
-                             capture_output=True, text=True, timeout=30).stdout
-        m = re.search(r"creation: (\d{4}):(\d{2}):(\d{2})", out)
+        if data[:2] != b"\xff\xd8":
+            return None
+        i = 2
+        while i < len(data) - 4:
+            if data[i] != 0xFF:
+                return None
+            marker = data[i + 1]
+            if marker == 0xDA:
+                return None
+            length = struct.unpack_from(">H", data, i + 2)[0]
+            if marker == 0xE1 and data[i + 4:i + 10] == b"Exif\x00\x00":
+                t = i + 10
+                endian = "<" if data[t:t + 2] == b"II" else ">"
+                ifd = t + struct.unpack_from(endian + "I", data, t + 4)[0]
+                n = struct.unpack_from(endian + "H", data, ifd)[0]
+                for k in range(n):
+                    e = ifd + 2 + k * 12
+                    if struct.unpack_from(endian + "H", data, e)[0] == 0x8769:
+                        sub = t + struct.unpack_from(endian + "I", data, e + 8)[0]
+                        m = struct.unpack_from(endian + "H", data, sub)[0]
+                        for j in range(m):
+                            se = sub + 2 + j * 12
+                            if struct.unpack_from(endian + "H", data, se)[0] == 0x9003:
+                                off = t + struct.unpack_from(endian + "I", data, se + 8)[0]
+                                raw = data[off:off + 19].decode("ascii", "replace")
+                                dm = re.match(r"(\d{4}):(\d{2}):(\d{2})", raw)
+                                if dm:
+                                    return f"{dm.group(1)}-{dm.group(2)}-{dm.group(3)}"
+                        return None
+                return None
+            i += 2 + length
+    except Exception:
+        pass
+    return None
+
+
+def exif_date(path):
+    """Capture date as YYYY-MM-DD, or None.
+
+    JPEGs: EXIF DateTimeOriginal or nothing — sips' `creation` property
+    is deliberately NOT used (Lightroom exports carry the export
+    timestamp there), and Spotlight falls back to the filesystem date
+    for EXIF-less files, which would stamp a plausible-but-wrong date.
+    Non-JPEG (HEIC): Spotlight's content-creation date, reported in UTC,
+    so a late-evening shot can land on the next calendar day.
+    """
+    if path.lower().endswith((".jpg", ".jpeg")):
+        return _jpeg_date_time_original(path)
+    try:
+        out = subprocess.run(
+            ["mdls", "-name", "kMDItemContentCreationDate", "-raw", path],
+            capture_output=True, text=True, timeout=30).stdout
+        m = re.search(r"(\d{4})-(\d{2})-(\d{2})", out)
         if m:
             return f"{m.group(1)}-{m.group(2)}-{m.group(3)}"
     except Exception:
